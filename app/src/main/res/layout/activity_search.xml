@@ -42,7 +42,7 @@
                 android:id="@+id/btn_route"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight=""
+                android:layout_weight="0"
                 android:padding="2dp"
                 android:text="route"/>
 
