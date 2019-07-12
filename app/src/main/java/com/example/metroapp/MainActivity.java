@@ -1,10 +1,13 @@
 package com.example.metroapp;
 
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.text);
 
         openingAnimation();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // this code be called after delay
+                Toast.makeText(getApplicationContext(), "3 seconds animation done.", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }, 3000);
     }
 
     public void openingAnimation(){
