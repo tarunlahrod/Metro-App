@@ -4,6 +4,7 @@ public class Station {
 
     private String stationName;
     private int stationColorCode;
+    private int stationGraphNode;
 
     public void setStationName(String name){
         this.stationName = name;
@@ -11,6 +12,10 @@ public class Station {
 
     public void setStationColorCode(int colorCode){
         this.stationColorCode = colorCode;
+    }
+
+    public void setStationGraphNode(int node) {
+        this.stationGraphNode = node;
     }
 
     public String getStationName(){
@@ -21,9 +26,28 @@ public class Station {
         return stationColorCode;
     }
 
+    public int getStationGraphNode(){
+        return stationGraphNode;
+    }
+
+    // default constructor
+    public Station(){
+        this.stationName = "null";
+        this.stationColorCode = 0;
+        this.stationGraphNode = 0;
+    }
+
     // Parameterised constructor
-    public Station(String name, int colorCode){
+    public Station(String name, int node, int colorCode){
         this.stationName = name;
+        this.stationGraphNode = node;
+        this.stationColorCode = colorCode;
+    }
+
+    //function to add a station explicitly
+    public void addStation(String name, int node, int colorCode){
+        this.stationName = name;
+        this.stationGraphNode = node;
         this.stationColorCode = colorCode;
     }
 
