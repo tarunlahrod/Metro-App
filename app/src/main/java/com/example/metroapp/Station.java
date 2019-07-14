@@ -44,21 +44,22 @@ public class Station {
         this.stationColorCode = colorCode;
     }
 
-    //function to add a station explicitly
-    public void addStation(String name, int node, int colorCode){
+    //function to add station values explicitly
+    public void addStationValues(String name, int node, int colorCode){
         this.stationName = name;
         this.stationGraphNode = node;
         this.stationColorCode = colorCode;
     }
 
     public String colorCodeToColorHex(int colorCode){
-        String red = "";
-        String blue = "";
-        String green = "";
-        String yellow = "";
+        String red = "#f00";
+        String blue = "#00f";
+        String green = "#0f0";
+        String yellow = "#ffff00";
         String pink = "";
         String purple = "";
         String magenta = "";
+        String black = "#000";
 
         String colorHex;
 
@@ -70,7 +71,7 @@ public class Station {
             case 5: colorHex = pink; break;
             case 6: colorHex = purple; break;
             case 7: colorHex = magenta; break;
-            default: colorHex = yellow;
+            default: colorHex = black;
         }
         return colorHex;
     }
