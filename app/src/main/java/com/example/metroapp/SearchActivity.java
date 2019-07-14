@@ -53,9 +53,9 @@ public class SearchActivity extends AppCompatActivity {
         fillStationArrayList(stationArray);
 
         // populating the list view of all the stations
-//        populateListView();
+        populateListView();
 
-        populateListViewRoute();
+//        populateListViewRoute();
 
         btn_route.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+                    populateListViewRoute();
                 }
             }
         });

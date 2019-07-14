@@ -28,12 +28,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // this code be called after delay
-                Toast.makeText(getApplicationContext(), "3 seconds animation done.", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(i);
                 finish();
             }
-        }, 1000);
+        }, 1500);
     }
 
     public void openingAnimation(){
