@@ -1,0 +1,24 @@
+Basic manipulations:
+	
+	1. new layout for route wali listView
+
+Graph manipulations:
+	
+	1. a function, say showOnListView() which takes in an arrayList and spare out all stationName[], stationNode[] and stationColorCode[] from the arrayList. Then using MyAdapter (the custom adapter) showing the output in the route wali listView.
+	
+	2. adding all the station nodes.
+		2.1. Make a list of all stations in text file or anywhere.
+		2.2. Make a list of all the stationNames, on various line, use any order (idk why but i prefer line color followed by alphabetical) but in listView use alphabetical order.
+
+	3. How would the graph work???
+		3.1. 
+			1. Get the node number from route source-destination.
+			2. Apply DFS.
+			3. Received an ArrayList containing various pathArrayLists.
+			4. Decoding path would take time, duh!
+
+
+UI:
+	1. Colored logos
+
+
