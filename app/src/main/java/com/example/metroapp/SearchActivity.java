@@ -29,11 +29,18 @@ public class SearchActivity extends AppCompatActivity {
     ArrayAdapter<String> adapterString;
     ArrayAdapter<Station> adapterStation;
     Station[] stationArray = new Station[5];
+
+    // a string array of stations in route
+    String[] routeNameArray;
+    int[] routeNodeArray;
+    
     Graph metroMap = new Graph(35);
 
     String[] stationNameList = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur", "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines", "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar", "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar", "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh", "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg", "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur", "Punjabi Bagh (W)", "Shakurpur"};
     int[] stationNodeList = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
     int[] stationColorCode = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+    boolean sourceEntered = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,17 @@ public class SearchActivity extends AppCompatActivity {
         // populating the list view of all the stations
         populateListView();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(!sourceEntered){
+                    et_from.setText(stationArrayList.get(position).getStationName());
+                    sourceEntered = true;
+                } else {
+                    et_to.setText(stationArrayList.get(position).getStationName());
+                }
+            }
+        });
 
         btn_route.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,11 +92,12 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-//                    populateListViewRoute();
-                    Intent i = new Intent(getApplicationContext(), RouteActivity.class);
-                    i.putExtra("nameList", stationNameList);
-                    i.putExtra("nodeList", stationNodeList);
-                    startActivity(i);
+
+                    showPath(from, to);
+//                    Intent i = new Intent(getApplicationContext(), RouteActivity.class);
+//                    i.putExtra("nameList", routeNameArray);
+//                    i.putExtra("nodeList", routeNodeArray);
+//                    startActivity(i);
                 }
             }
         });
@@ -256,6 +275,60 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    public void showPath(String source, String destination) {
+        int src, dest;
+        src = search(source);
+        dest = search(destination);
+
+        // use something like: metroMap.get(position).getStationGraphNode;
+    	metroMap.printAllPaths(src, dest);
+    	ArrayList <ArrayList <Integer> > allRouteArrayList = new ArrayList <ArrayList<Integer>>();
+
+    	allRouteArrayList = metroMap.getAllPaths();
+    	
+    	// say, selecting the first path only
+    	ArrayList<Integer> routeArrayList = new ArrayList<>();
+    	routeArrayList = allRouteArrayList.get(0);
+    	int routeLength = routeArrayList.size();
+
+    	// a string array of stations in route
+    	routeNameArray = new  String[routeLength];
+    	routeNodeArray = new int[routeLength];
+
+    	routeNameArray = nodeToStation(routeArrayList, routeLength);
+    	routeNodeArray = nodeArrayListToNodeArray(routeArrayList, routeLength);
+
+    	// passing strings to intent
+        Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
+        intent.putExtra("nameList", routeNameArray);
+        intent.putExtra("nodeList", routeNodeArray);
+        startActivity(intent);
+
+    }
+
+    public int search(String s){
+        int index=0;
+        for(int i=0; i<stationNameList.length; i++)
+            if(s == stationNameList[i])
+                index = i;
+        return index;
+    }
+
+    public String[] nodeToStation(ArrayList<Integer> route, int length){
+    	String[] stationName = new String[length];
+    	for(int i = 0; i < length; i++){
+    		stationName[i] = stationNameList[route.get(i)];
+    	}
+    	return stationName;
+    }
+
+    public int[] nodeArrayListToNodeArray(ArrayList<Integer> route, int length){
+    	int[] stationNode = new int[length];
+    	for(int i=0; i<length; i++){
+    		stationNode[i] = route.get(i);
+    	}
+    	return stationNode;
+    }
 
     // creating a custom array adapter class
 

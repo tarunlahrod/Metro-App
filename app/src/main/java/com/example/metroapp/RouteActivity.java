@@ -54,9 +54,6 @@ public class RouteActivity extends AppCompatActivity {
             sName.setText(stationName[position]);
             sNode.setText("Node number " + stationNode[position]);
 
-
-
-
             return row;
         }
     }
