@@ -73,6 +73,7 @@ public class SearchActivity extends AppCompatActivity {
                     sourceEntered = true;
                 } else {
                     et_to.setText(stationArrayList.get(position).getStationName());
+                    sourceEntered = false;
                 }
             }
         });
@@ -94,10 +95,6 @@ public class SearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
 
                     showPath(from, to);
-//                    Intent i = new Intent(getApplicationContext(), RouteActivity.class);
-//                    i.putExtra("nameList", routeNameArray);
-//                    i.putExtra("nodeList", routeNodeArray);
-//                    startActivity(i);
                 }
             }
         });
