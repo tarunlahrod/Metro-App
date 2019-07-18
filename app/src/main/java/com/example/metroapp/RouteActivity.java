@@ -21,10 +21,13 @@ public class RouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route);
         listViewRoute = findViewById(R.id.listView_route);
 
-        String[] stationNameList = getIntent().getStringArrayExtra("nameList");
+        String stationNameList[];
+
+        stationNameList = getIntent().getStringArrayExtra("nameList");
         int[] stationNodeList = getIntent().getIntArrayExtra("nodeList");
 
-        MyAdapter adapter = new MyAdapter(this, stationNameList, stationNodeList);
+//        MyAdapter adapter = new MyAdapter(this, stationNameList, stationNodeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stationNameList);
         listViewRoute.setAdapter(adapter);
     }
 
