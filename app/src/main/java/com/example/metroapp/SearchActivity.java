@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,11 @@ public class SearchActivity extends AppCompatActivity {
                 if(!sourceEntered){
                     et_from.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = true;
+                    Log.d("route", "from: " + et_from.getText().toString());
                 } else {
                     et_to.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = false;
+                    Log.d("route", "to: " + et_to);
                 }
             }
         });
@@ -272,42 +275,63 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+
+
+
     public void showPath(String source, String destination) {
         int src, dest;
         src = search(source);
         dest = search(destination);
+
+        Log.d("route", "src: " + src);
+        Log.d("route", "dest: " + dest);
+
 
         // use something like: metroMap.get(position).getStationGraphNode;
     	metroMap.printAllPaths(src, dest);
     	ArrayList <ArrayList <Integer> > allRouteArrayList = new ArrayList <ArrayList<Integer>>();
 
     	allRouteArrayList = metroMap.getAllPaths();
-    	
-    	// say, selecting the first path only
-    	ArrayList<Integer> routeArrayList = new ArrayList<>();
-    	routeArrayList = allRouteArrayList.get(0);
-    	int routeLength = routeArrayList.size();
 
-    	// a string array of stations in route
-    	routeNameArray = new  String[routeLength];
-    	routeNodeArray = new int[routeLength];
-
-    	routeNameArray = nodeToStation(routeArrayList, routeLength);
-    	routeNodeArray = nodeArrayListToNodeArray(routeArrayList, routeLength);
-
-    	// passing strings to intent
+        // passing arrayList to intent
         Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
-        intent.putExtra("nameList", routeNameArray);
-        intent.putExtra("nodeList", routeNodeArray);
+
+        // passing the number of paths
+        intent.putExtra("noOfArrayLists", allRouteArrayList.size());
+
+        // passing individual paths
+        for(int i=0; i<allRouteArrayList.size(); i++) {
+            intent.putExtra("pathArrayList", allRouteArrayList.get(i));
+        }
+        Log.d("route", "starting intent");
         startActivity(intent);
+//
+//    	// say, selecting the first path only
+//    	ArrayList<Integer> routeArrayList = new ArrayList<>();
+//    	routeArrayList = allRouteArrayList.get(0);
+//
+//    	int routeLength = routeArrayList.size();
+//
+//    	// a string array of stations in route
+//    	routeNameArray = new  String[routeLength];
+//    	routeNodeArray = new int[routeLength];
+//
+//    	routeNameArray = nodeToStation(routeArrayList, routeLength);
+//    	routeNodeArray = nodeArrayListToNodeArray(routeArrayList, routeLength);
+//
+//    	for(int i =0; i<routeLength; i++) {
+//            Log.d("route", "The route is  route: " + routeNameArray[i]);
+//        }
+
 
     }
 
     public int search(String s){
         int index=0;
         for(int i=0; i<stationNameList.length; i++)
-            if(s == stationNameList[i])
+            if(s.equals(stationNameList[i]))
                 index = i;
+            Log.d("route", "inside search, index: " + index );
         return index;
     }
 
