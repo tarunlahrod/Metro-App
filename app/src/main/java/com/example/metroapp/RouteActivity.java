@@ -1,10 +1,12 @@
 package com.example.metroapp;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 public class RouteActivity extends AppCompatActivity {
 
     ListView listViewRoute;
+    TextView tv_station, tv_cost, tv_time;
     Spinner spinner;
     MyAdapter adapter;
 
@@ -33,6 +36,9 @@ public class RouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         listViewRoute = findViewById(R.id.listView_route);
+        tv_station = findViewById(R.id.numStation);
+        tv_cost = findViewById(R.id.cost);
+        tv_time = findViewById(R.id.time);
 
         spinner = findViewById(R.id.spinner);
         int numArrayList;
@@ -42,30 +48,26 @@ public class RouteActivity extends AppCompatActivity {
         //getting data from intent
         numArrayList  = getIntent().getIntExtra("noOfArrayLists", 3);
         allRouteArrayList = new ArrayList<>(numArrayList);
+        Log.d("route", "all paths list declared with size 3: "+ allRouteArrayList);
 
         String[] routes = new String[numArrayList];
 
-        for(int i = 0; i<numArrayList; i++){
+        for(int i = 0; i < numArrayList; i++){
             routes[i] = "Route " + (i+1);
-            ArrayList<Integer> arrayList = getIntent().getIntegerArrayListExtra("pathArrayList");
+            ArrayList<Integer> arrayList = getIntent().getIntegerArrayListExtra("pathArrayList"+i);
+            tv_station.setText("" + arrayList.size());
+            tv_time.setText("" + 2*arrayList.size() + " min");
+            tv_cost.setText("Rs. 0");
             allRouteArrayList.add(arrayList);
         }
+
+        Log.d("route", "all paths list after adding all routes: "+ allRouteArrayList);
 
         //setting the spinner
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
 
-
-//        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String stationNameArray[] = nodeToStation(allRouteArrayList.get(position), allRouteArrayList.get(position).size());
-//                int stationNodeArray[] = nodeArrayListToNodeArray(allRouteArrayList.get(position), allRouteArrayList.get(position).size());
-//                MyAdapter adapter = new MyAdapter(getApplicationContext(), stationNameArray, stationNodeArray);
-//                listViewRoute.setAdapter(adapter);
-//            }
-//        });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -77,6 +79,9 @@ public class RouteActivity extends AppCompatActivity {
                 adapter = new MyAdapter(getApplicationContext(), stationNameArray, stationNodeArray);
                 listViewRoute.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                tv_station.setText("" + stationNameArray.length);
+                tv_cost.setText("Rs. 0");
+                tv_time.setText("" + 2*stationNameArray.length);
             }
 
             @Override

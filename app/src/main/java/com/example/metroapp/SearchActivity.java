@@ -301,7 +301,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // passing individual paths
         for(int i=0; i<allRouteArrayList.size(); i++) {
-            intent.putExtra("pathArrayList", allRouteArrayList.get(i));
+            intent.putExtra("pathArrayList" + i, allRouteArrayList.get(i));
         }
         Log.d("route", "starting intent");
         startActivity(intent);
