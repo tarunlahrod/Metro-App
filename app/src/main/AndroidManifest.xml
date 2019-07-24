@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/delhi_metro_logo"
+        android:icon="@drawable/delhi_metro_logo1"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/delhi_metro_logo"
+        android:roundIcon="@drawable/delhi_metro_logo1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RouteActivity"></activity>

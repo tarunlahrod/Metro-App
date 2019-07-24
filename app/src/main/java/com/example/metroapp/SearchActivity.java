@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     // a string array of stations in route
     String[] routeNameArray;
     int[] routeNodeArray;
-    
+
     Graph metroMap = new Graph(35);
 
     String[] stationNameList = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur", "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines", "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar", "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar", "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh", "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg", "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur", "Punjabi Bagh (W)", "Shakurpur"};
@@ -122,11 +123,6 @@ public class SearchActivity extends AppCompatActivity {
     public void populateListView(){
         adapterString = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stationNameList);
         listView.setAdapter(adapterString);
-    }
-
-    public void populateListViewRoute(){
-        MyAdapter adapter = new MyAdapter(this, stationNameList, stationNodeList);
-        listView.setAdapter(adapter);
     }
 
     public void addEdgesToMetroMap(){
@@ -351,16 +347,20 @@ public class SearchActivity extends AppCompatActivity {
     	return stationNode;
     }
 
+    public
+
     // creating a custom array adapter class
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String stationName[];
         int stationNode[];
+        int lineColor[];
 
-        MyAdapter (Context c, String name[], int node[]) {
+        MyAdapter (Context c, String name[], int node[], int img[]) {
             super(c, R.layout.station_row, R.id.tv_stationName, name);
             this.context = c;
+            this.lineColor = img;
             this.stationName = name;
             this.stationNode = node;
         }
@@ -372,11 +372,12 @@ public class SearchActivity extends AppCompatActivity {
             View row = layoutInflater.inflate(R.layout.station_row, parent, false);
             TextView sName = row.findViewById(R.id.tv_stationName);
             TextView sNode = row.findViewById(R.id.tv_stationNode);
+            ImageView sColor = row.findViewById(R.id.imageView);
 
             // now set our resources on views
             sName.setText(stationName[position]);
             sNode.setText("Node number " + stationNode[position]);
-
+            sColor.setImageResource(lineColor[position]);
 
 
 

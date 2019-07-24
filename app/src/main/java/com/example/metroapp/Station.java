@@ -75,4 +75,31 @@ public class Station {
         }
         return colorHex;
     }
+
+    public int colorCodeToImageResource(int colorCode){
+        int red = R.drawable.delhi_metro_logo1;
+        int blue = R.drawable.delhi_metro_logo2;
+        int green = R.drawable.delhi_metro_logo3;
+        int yellow = R.drawable.delhi_metro_logo4;
+        int pink = R.drawable.delhi_metro_logo5;
+        int purple = R.drawable.delhi_metro_logo6;
+        int magenta = R.drawable.delhi_metro_logo7;
+        int black = R.drawable.delhi_metro;
+
+        int logoColor;
+
+        switch(colorCode){
+            case 1: logoColor = red; break;
+            case 2: logoColor = blue; break;
+            case 3: logoColor = green; break;
+            case 4: logoColor = yellow; break;
+            case 5: logoColor = pink; break;
+            case 6: logoColor = purple; break;
+            case 7: logoColor = magenta; break;
+            default: logoColor = black;
+        }
+        return logoColor;
+    }
+
+
 }

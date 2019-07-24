@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:padding="100dp"
-        android:src="@drawable/delhi_metro_logo" />
+        android:src="@drawable/delhi_metro_logo1" />
 
     <TextView
         android:id="@+id/text"

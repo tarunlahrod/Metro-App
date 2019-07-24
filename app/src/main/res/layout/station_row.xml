@@ -12,7 +12,7 @@
         android:layout_width="37dp"
         android:layout_height="37dp"
         android:padding="5dp"
-        android:src="@drawable/delhi_metro_logo"
+        android:src="@drawable/delhi_metro_logo1"
         android:background="#81C2C2C2"/>
 
     <LinearLayout
