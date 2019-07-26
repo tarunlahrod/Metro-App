@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,8 +43,9 @@ public class RouteActivity extends AppCompatActivity {
         tv_station = findViewById(R.id.numStation);
         tv_cost = findViewById(R.id.cost);
         tv_time = findViewById(R.id.time);
-
         spinner = findViewById(R.id.spinner);
+
+
         int numArrayList;
         final ArrayList <ArrayList <Integer> > allRouteArrayList;
 
@@ -93,9 +95,6 @@ public class RouteActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
     }
 
@@ -178,6 +177,8 @@ public class RouteActivity extends AppCompatActivity {
         int pink = R.drawable.delhi_metro_logo5;
         int purple = R.drawable.delhi_metro_logo6;
         int magenta = R.drawable.delhi_metro_logo7;
+		int violet = R.drawable.delhi_metro_logo8;
+		int orange = R.drawable.delhi_metro_logo9;
         int black = R.drawable.delhi_metro;
 
         int logoColor;
@@ -190,6 +191,8 @@ public class RouteActivity extends AppCompatActivity {
             case 5: logoColor = pink; break;
             case 6: logoColor = purple; break;
             case 7: logoColor = magenta; break;
+			case 8: logoColor = violet; break;
+			case 9: logoColor = orange; break;
             default: logoColor = black;
         }
         return logoColor;
