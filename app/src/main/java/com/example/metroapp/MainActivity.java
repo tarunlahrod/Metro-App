@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openingAnimation(){
-        logo.animate().scaleXBy(0.5f).scaleYBy(0.5f).setDuration(1000);
-        textView.animate().translationY(200).setDuration(1000);
+        logo.animate().scaleXBy(0.5f).scaleYBy(0.5f).setDuration(2000);
+        textView.animate().translationY(200).setDuration(2000);
     }
 }
