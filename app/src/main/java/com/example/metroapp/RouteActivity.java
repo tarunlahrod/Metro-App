@@ -32,9 +32,10 @@ public class RouteActivity extends AppCompatActivity {
 
 
     String[] stationNameList = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur", "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines", "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar", "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar", "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh", "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg", "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur", "Punjabi Bagh (W)", "Shakurpur"};
-    int[] stationNodeList = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
-    int[] stationColorCode = new int[]{1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
-
+    int[] stationNodeList = new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
+    int[] stationColorCode = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
+    int[] stationInterchange = new int[]{ 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0};
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,6 @@ public class RouteActivity extends AppCompatActivity {
         //getting data from intent
         numArrayList  = getIntent().getIntExtra("noOfArrayLists", 3);
         allRouteArrayList = new ArrayList<>(numArrayList);
-        Log.d("route", "all paths list declared with size 3: "+ allRouteArrayList);
 
         String[] routes = new String[numArrayList];
 
@@ -68,8 +68,6 @@ public class RouteActivity extends AppCompatActivity {
             sortBubble(allRouteArrayList);
         }
 
-        Log.d("route", "all paths list after adding all routes: "+ allRouteArrayList);
-
         //setting the spinner
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,15 +77,22 @@ public class RouteActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String stationNameArray[] = nodeToStation(allRouteArrayList.get(position), allRouteArrayList.get(position).size());
-                int stationNodeArray[] = nodeArrayListToNodeArray(allRouteArrayList.get(position), allRouteArrayList.get(position).size());
-                int stationColorArray[] = nodeToColor(allRouteArrayList.get(position), allRouteArrayList.get(position).size());
+            	
+            	int size = allRouteArrayList.get(position).size();
+
+                String stationNameArray[] = nodeToStation(allRouteArrayList.get(position), size);
+                int stationNodeArray[] = nodeArrayListToNodeArray(allRouteArrayList.get(position), size);
+                int stationColorArray[] = nodeToColor(allRouteArrayList.get(position), size);
+
+                int time = calculateTime(allRouteArrayList.get(position), size);
+                
                 adapter = new MyAdapter(getApplicationContext(), stationNameArray, stationNodeArray, stationColorArray);
                 listViewRoute.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                
                 tv_station.setText("" + stationNameArray.length);
                 tv_cost.setText("Rs. 0");
-                tv_time.setText("" + 2*stationNameArray.length + " min");
+                tv_time.setText("" + time + " min");
             }
 
             @Override
@@ -197,6 +202,34 @@ public class RouteActivity extends AppCompatActivity {
         }
         return logoColor;
     }
+
+    public int calculateTime(ArrayList<Integer> route, int length) {
+
+    	// Time criteria: 2 min at all stations except at interchange and 3 min at interchange
+
+    	// Logic: 2 min x no. of stations + 1 min for each interchange
+    	int time = 2*length;
+
+    	for(int i=0; i<length; i++){
+
+    		// check if current station is an interchangable station
+    		// if interchangable stations at first and last, do not consider them as interchange
+    		if((stationInterchange[route.get(i)] == 1) && (i != 1) && (i != length-1)){
+
+    			// if interchangable station, then check if the path has an interchange
+    			// for this, check if the lineColor of previous and next station is same or not. If not, it is an interchange
+    			if(stationColorCode[route.get(i-1)] != stationColorCode[route.get(i+1)]){
+
+    				// It is an interchange
+    				// Increment time by 1 min.
+    				time++;
+    			}
+    		}
+    	}
+
+    	//return the time
+    	return time;
+	}
 
 
 }
