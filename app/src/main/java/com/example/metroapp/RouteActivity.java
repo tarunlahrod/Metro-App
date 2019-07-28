@@ -35,7 +35,8 @@ public class RouteActivity extends AppCompatActivity {
     int[] stationNodeList = new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
     int[] stationColorCode = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
     int[] stationInterchange = new int[]{ 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0};
-    
+    float[] crowdWeight = new float[]{0.75f, 0.62f, 0.7f, 0.66f, 0.72f, 0.78f, 0.62f, 0.6f, 0.85f, 0.63f, 0.62f, 0.64f, 0.7f, 0.78f, 0.7f, 0.65f, 0.79f, 0.78f, 0.8f, 0.95f, 0.7f, 0.75f, 0.8f, 0.75f, 0.69f, 0.7f, 0.85f, 0.63f, 0.71f, 0.68f, 0.66f, 0.78f, 0.75f, 0.75f, 0.75f};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,18 +59,33 @@ public class RouteActivity extends AppCompatActivity {
         //getting data from intent
         numArrayList  = getIntent().getIntExtra("noOfArrayLists", 3);
         allRouteArrayList = new ArrayList<>(numArrayList);
-
         String[] routes = new String[numArrayList];
 
         for(int i = 0; i < numArrayList; i++){
             routes[i] = "Route " + (i+1);
             ArrayList<Integer> arrayList = getIntent().getIntegerArrayListExtra("pathArrayList"+i);
             allRouteArrayList.add(arrayList);
-            sortBubble(allRouteArrayList);
+        }
+        sortBubble(allRouteArrayList);
+
+        // storing only 3 routes at maximum
+        String[] routes3only;
+        if(numArrayList > 3){
+            routes3only = new String[3];
+            for(int i = 3; i < numArrayList; i++)
+                routes3only[i] = routes[i];
+
+            // set numArrayList = 3
+            numArrayList = 3;
+        }
+        else{
+            routes3only = new String[numArrayList];
+            for(int i = 0; i < numArrayList; i++)
+                routes3only[i] = routes[i];
         }
 
         //setting the spinner
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes3only);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
 
@@ -212,9 +228,9 @@ public class RouteActivity extends AppCompatActivity {
 
     	for(int i=0; i<length; i++){
 
-    		// check if current station is an interchangable station
+    		// check if current station is an interchangeable station
     		// if interchangable stations at first and last, do not consider them as interchange
-    		if((stationInterchange[route.get(i)] == 1) && (i != 1) && (i != length-1)){
+    		if((stationInterchange[route.get(i)] == 1) && (i != 0) && (i != length-1)){
 
     			// if interchangable station, then check if the path has an interchange
     			// for this, check if the lineColor of previous and next station is same or not. If not, it is an interchange
