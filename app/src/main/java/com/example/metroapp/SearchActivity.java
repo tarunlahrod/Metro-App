@@ -13,11 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,11 +41,24 @@ public class SearchActivity extends AppCompatActivity {
     int[] routeNodeArray;
 
     Graph metroMap = new Graph(35);
+    String[] stationNames = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur",
+            "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines",
+            "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar",
+            "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar",
+            "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh",
+            "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg",
+            "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur",
+            "Punjabi Bagh (W)", "Shakurpur"};
+
+//    int image[]={R.drawable.delhi_metro_logo1,R.drawable.delhi_metro_logo2,R.drawable.delhi_metro_logo3,
+//            R.drawable.delhi_metro_logo4,R.drawable.delhi_metro_logo5,R.drawable.delhi_metro_logo6,
+//            R.drawable.delhi_metro_logo7,R.drawable.delhi_metro_logo8,R.drawable.delhi_metro_logo9};
 
     String[] stationNameList = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur", "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines", "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar", "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar", "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh", "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg", "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur", "Punjabi Bagh (W)", "Shakurpur"};
     int[] stationNodeList = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
     int[] stationColorCode = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
     boolean sourceEntered = false;
+//    int[] stationColorCodes = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
 
 
     @Override
@@ -54,6 +69,81 @@ public class SearchActivity extends AppCompatActivity {
         et_to = findViewById(R.id.et_to);
         btn_route = findViewById(R.id.btn_route);
         listView = findViewById(R.id.listView);
+//        class myAdapter extends ArrayAdapter<String>{
+//            Context context;
+//            String stations[];
+//            int images[];
+//            int stationcolor[];
+//            myAdapter(Context c,String title[],int photos[],int colors[]){
+//                super(c,R.layout.searchstation_row,R.id.station_name,title);
+//                this.stationcolor=colors;
+//                this.context=c;
+//                this.stations=title;
+//                this.images=photos;
+//            }
+//
+//            @NonNull
+//            @Override
+//            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//                LayoutInflater layoutInflater=(LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View view=layoutInflater.inflate(R.layout.searchstation_row,parent,false);
+//                ImageView imageView=view.findViewById(R.id.image_logo);
+//                TextView textView=view.findViewById(R.id.station_name);
+////            imageView.setImageResource(stationcolor[position]);
+//                textView.setText(stations[position]);
+//                for (int i=0;i<stationColorCode.length;i++) {
+//                    int color=stationcolor[i];
+//                    Log.d("Color", "Value of color is" + stationcolor.length);
+//                    Log.d("Color", "Value of color is" + color);
+//                    switch (color){
+//
+//                        case 1:
+//                            Log.d("Color","Case 1");
+//                            imageView.setImageResource(images[0]);
+//                            break;
+//                        case 2:
+//                            Log.d("Color","Case 2");
+//                            imageView.setImageResource(image[1]);
+//                            break;
+//                        case 3:
+//                            Log.d("Color","Case 3");
+//                            imageView.setImageResource(image[2]);
+//                            break;
+//                        case 4:
+//                            Log.d("Color","Case 4");
+//                            imageView.setImageResource(image[3]);
+//                            break;
+//                        case 5:
+//                            Log.d("Color","Case 5");
+//                            imageView.setImageResource(image[4]);
+//                            break;
+//                        case 6:
+//                            Log.d("Color","Case 6");
+//                            imageView.setImageResource(image[5]);
+//                            break;
+//                        case 7:
+//                            Log.d("Color","Case 7");
+//                            imageView.setImageResource(image[6]);
+//                            break;
+//                        case 8:
+//                            Log.d("Color","Case 8");
+//                            imageView.setImageResource(image[7]);
+//                            break;
+//                        case 9:
+//                            Log.d("Color","Case 9");
+//                            imageView.setImageResource(image[8]);
+//                            break;
+//                        default:
+//                            Log.d("Color","Default case");
+//                            imageView.setImageResource(image[2]);
+//                    }
+//                }
+//
+//                return view;
+//            }}
+//
+//        myAdapter adapter=new myAdapter(this,stationNames,image,stationColorCode);
+//        listView.setAdapter(adapter);
 
         Station[] stationArray = new Station[35];
         for(int i = 0; i<35; i++){
