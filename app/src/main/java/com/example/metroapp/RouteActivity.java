@@ -68,11 +68,15 @@ public class RouteActivity extends AppCompatActivity {
         }
         sortBubble(allRouteArrayList);
 
+
         // storing only 3 routes at maximum
         String[] routes3only;
         if(numArrayList > 3){
             routes3only = new String[3];
+            Log.d("okok", numArrayList + "");
+
             for(int i = 3; i < numArrayList; i++) {
+                Log.d("okok", "77");
                 routes3only[i] = routes[i] + "";
             }
 
@@ -80,10 +84,13 @@ public class RouteActivity extends AppCompatActivity {
             numArrayList = 3;
         }
         else {
+
             routes3only = new String[numArrayList];
             for(int i = 0; i < numArrayList; i++)
                 routes3only[i] = routes[i] + "";
+            Log.d("okok", "88");
         }
+        Log.d("okok", "90");
 
         int timeEfficient = getTimeEfficientRouteIndex(allRouteArrayList, numArrayList);
         int crowdEfficient = getCrowdEfficientRouteIndex(allRouteArrayList, numArrayList);
@@ -136,7 +143,7 @@ public class RouteActivity extends AppCompatActivity {
         int lineColor[];
 
         MyAdapter (Context c, String name[], int node[], int img[]) {
-            super(c, R.layout.station_row, R.id.tv_stationName, name);
+            super(c, R.layout.station_row_final, R.id.tv_stationName, name);
             this.context = c;
             this.lineColor = img;
             this.stationName = name;
@@ -147,7 +154,7 @@ public class RouteActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.station_row, parent, false);
+            View row = layoutInflater.inflate(R.layout.station_row_final, parent, false);
             TextView sName = row.findViewById(R.id.tv_stationName);
             TextView sNode = row.findViewById(R.id.tv_stationNode);
             ImageView sColor = row.findViewById(R.id.imageView);
@@ -156,8 +163,6 @@ public class RouteActivity extends AppCompatActivity {
             sName.setText(stationName[position]);
             sNode.setText("Node number " + stationNode[position]);
             sColor.setImageResource(lineColor[position]);
-
-
 
             return row;
         }
@@ -237,10 +242,10 @@ public class RouteActivity extends AppCompatActivity {
     	for(int i=0; i<length; i++){
 
     		// check if current station is an interchangeable station
-    		// if interchangable stations at first and last, do not consider them as interchange
+    		// if interchangeable stations at first and last, do not consider them as interchange
     		if((stationInterchange[route.get(i)] == 1) && (i != 0) && (i != length-1)){
 
-    			// if interchangable station, then check if the path has an interchange
+    			// if interchangeable station, then check if the path has an interchange
     			// for this, check if the lineColor of previous and next station is same or not. If not, it is an interchange
     			if(stationColorCode[route.get(i-1)] != stationColorCode[route.get(i+1)]){
 

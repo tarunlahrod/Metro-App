@@ -68,10 +68,10 @@ public class SearchActivity extends AppCompatActivity {
         fillStationArrayList(stationArray);
 
         // populating the list view of all the stations
-//        populateListView();
+        populateListView();
 
-        // populating the list view of all the stations (with logo)
-        populateListViewWithLogo();
+        // populating the list view of all the stations (with logo) (does not work, has bugs)
+//        populateListViewWithLogo();
 
 
         //Suggestions for user in listview based on the letter they typed to enter station for source
@@ -137,11 +137,9 @@ public class SearchActivity extends AppCompatActivity {
                 if(!sourceEntered){
                     et_from.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = true;
-                    Log.d("route", "from: " + et_from.getText().toString());
                 } else {
                     et_to.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = false;
-                    Log.d("route", "to: " + et_to);
                 }
             }
         });
@@ -160,9 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                     et_to.requestFocus();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-
-                    showPath(from, to);
+                   showPath(from, to);
                 }
             }
         });
@@ -395,6 +391,7 @@ public class SearchActivity extends AppCompatActivity {
 
     	allRouteArrayList = metroMap.getAllPaths();
 
+    	Log.d("okok", "All paths:" + allRouteArrayList);
         // passing arrayList to intent
         Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
 
@@ -407,7 +404,6 @@ public class SearchActivity extends AppCompatActivity {
         }
         Log.d("route", "starting intent");
         startActivity(intent);
-        finish();
     }
 
     public int search(String s){
@@ -444,7 +440,7 @@ public class SearchActivity extends AppCompatActivity {
         int lineColor[];
 
         MyAdapter (Context c, String name[], int node[], int img[]) {
-            super(c, R.layout.station_row, R.id.tv_stationName, name);
+            super(c, R.layout.station_row_final, R.id.tv_stationName, name);
             this.context = c;
             this.lineColor = img;
             this.stationName = name;
@@ -455,7 +451,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.station_row, parent, false);
+            View row = layoutInflater.inflate(R.layout.station_row_final, parent, false);
             TextView sName = row.findViewById(R.id.tv_stationName);
             TextView sNode = row.findViewById(R.id.tv_stationNode);
             ImageView sColor = row.findViewById(R.id.imageView);
