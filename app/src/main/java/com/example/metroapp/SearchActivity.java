@@ -233,8 +233,9 @@ public class SearchActivity extends AppCompatActivity {
         btn_route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),cardview.class);
-                startActivity(intent);
+                //This intent starts the cardview
+//                Intent intent=new Intent(getApplicationContext(),cardview.class);
+//                startActivity(intent);
                 String from = et_from.getText().toString();
                 String to = et_to.getText().toString();
 
@@ -248,7 +249,7 @@ public class SearchActivity extends AppCompatActivity {
                 else{
                     Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
 
-                    //showPath(from, to);
+                    showPath(from, to);
                 }
             }
         });
