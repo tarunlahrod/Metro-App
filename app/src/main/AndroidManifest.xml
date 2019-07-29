@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/delhi_metro_logo1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RouteActivity"></activity>
+        <activity android:name=".cardview"></activity>
+        <activity android:name=".RouteActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
