@@ -67,7 +67,6 @@ public class RouteActivity extends AppCompatActivity {
             allRouteArrayList.add(arrayList);
         }
         sortBubble(allRouteArrayList);
-        Log.d("okok", "here");
 
         // storing only 3 routes at maximum
         String[] routes3only;
@@ -75,8 +74,6 @@ public class RouteActivity extends AppCompatActivity {
             routes3only = new String[3];
             for(int i = 3; i < numArrayList; i++) {
                 routes3only[i] = routes[i] + "";
-
-                Log.d("okok", routes3only[i]);
             }
 
             // set numArrayList = 3
