@@ -67,22 +67,33 @@ public class RouteActivity extends AppCompatActivity {
             allRouteArrayList.add(arrayList);
         }
         sortBubble(allRouteArrayList);
+        Log.d("okok", "here");
 
         // storing only 3 routes at maximum
         String[] routes3only;
         if(numArrayList > 3){
             routes3only = new String[3];
-            for(int i = 3; i < numArrayList; i++)
-                routes3only[i] = routes[i];
+            for(int i = 3; i < numArrayList; i++) {
+                routes3only[i] = routes[i] + "";
+
+                Log.d("okok", routes3only[i]);
+            }
 
             // set numArrayList = 3
             numArrayList = 3;
         }
-        else{
+        else {
             routes3only = new String[numArrayList];
             for(int i = 0; i < numArrayList; i++)
-                routes3only[i] = routes[i];
+                routes3only[i] = routes[i] + "";
         }
+
+        int timeEfficient = getTimeEfficientRouteIndex(allRouteArrayList, numArrayList);
+        int crowdEfficient = getCrowdEfficientRouteIndex(allRouteArrayList, numArrayList);
+
+        routes3only[timeEfficient] += " (Time Efficient)";
+        routes3only[crowdEfficient] += " (Crowd Efficient)";
+
 
         //setting the spinner
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes3only);
@@ -245,6 +256,36 @@ public class RouteActivity extends AppCompatActivity {
 
     	//return the time
     	return time;
+	}
+
+	public int getTimeEfficientRouteIndex(ArrayList <ArrayList <Integer> > allroutes, int n) {
+		
+		int[] time = new int[n];
+		for(int i = 0; i < n; i++){
+			time[i] = calculateTime(allroutes.get(i), allroutes.get(i).size());
+		}
+		int minInd = 0;
+		for(int i = 1; i < n; i++)
+			if(time[i] < time[minInd])
+				minInd = i;
+
+		return minInd;
+	}
+
+	public int getCrowdEfficientRouteIndex(ArrayList <ArrayList <Integer> > allroutes, int n) {
+		
+		float[] crowd = new float[n];
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < allroutes.get(i).size(); j++){
+				crowd[i] += crowdWeight[allroutes.get(i).get(j)];
+			}
+		}
+		int minInd = 0;
+		for(int i = 1; i < n; i++)
+			if(crowd[i] < crowd[minInd])
+				minInd = i;
+
+		return minInd;
 	}
 
 

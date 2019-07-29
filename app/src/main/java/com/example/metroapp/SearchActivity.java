@@ -301,25 +301,7 @@ public class SearchActivity extends AppCompatActivity {
         }
         Log.d("route", "starting intent");
         startActivity(intent);
-//
-//    	// say, selecting the first path only
-//    	ArrayList<Integer> routeArrayList = new ArrayList<>();
-//    	routeArrayList = allRouteArrayList.get(0);
-//
-//    	int routeLength = routeArrayList.size();
-//
-//    	// a string array of stations in route
-//    	routeNameArray = new  String[routeLength];
-//    	routeNodeArray = new int[routeLength];
-//
-//    	routeNameArray = nodeToStation(routeArrayList, routeLength);
-//    	routeNodeArray = nodeArrayListToNodeArray(routeArrayList, routeLength);
-//
-//    	for(int i =0; i<routeLength; i++) {
-//            Log.d("route", "The route is  route: " + routeNameArray[i]);
-//        }
-
-
+        finish();
     }
 
     public int search(String s){
