@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +68,63 @@ public class SearchActivity extends AppCompatActivity {
 
         // populating the list view of all the stations
         populateListView();
+        //Suggestions for user in listview based on the letter they typed to enter station for source
+        et_from.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //populateListView();
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Triggered when text changed at et_to edittext
+                Log.d("Listview","Is this list view working");
+                SearchActivity.this.adapterString.getFilter().filter(s);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("SearchActivity","Item clicked at location"+position);
+                        String elemt=adapterString.getItem(position);
+                        et_from.setText(elemt);
+                        et_to.requestFocus();
+                    }
+                });
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        //Suggestions for user in listview based on the letter they typed to enter station for destination
+        et_to.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                populateListView();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Triggered when text changed at et_from edittext
+                Log.d("Listview","Is this list view working");
+                SearchActivity.this.adapterString.getFilter().filter(s);
+                listView.setVisibility(View.VISIBLE);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("SearchActivity","Item clicked at location"+position);
+                        String elemt=adapterString.getItem(position);
+                        et_to.setText(elemt);
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
