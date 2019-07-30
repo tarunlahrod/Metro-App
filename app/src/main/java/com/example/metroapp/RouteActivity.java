@@ -268,6 +268,19 @@ public class RouteActivity extends AppCompatActivity {
     	return time;
 	}
 
+	public float calculateCrowd(ArrayList<Integer> route, int length) {
+		// variable for crowd count.
+		float crowd = 0.0;
+
+		// a loop to go through the crowd values of all the stations in the current route and sum them up.
+		for(int i = 0; i < length; i++){
+			crowd += crowdWeight[routes.get(i)];
+		}
+
+		// return the total summed up crowd.
+		return crowd;
+	}
+
 	public int getTimeEfficientRouteIndex(ArrayList <ArrayList <Integer> > allroutes, int n) {
 		
 		int[] time = new int[n];
