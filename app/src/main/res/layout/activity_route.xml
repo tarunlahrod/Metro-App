@@ -17,6 +17,7 @@
             android:background="@drawable/shape2">
 
             <TextView
+                android:id="@+id/titleBar"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Route"

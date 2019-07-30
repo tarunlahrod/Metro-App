@@ -20,13 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class RouteActivity extends AppCompatActivity {
 
     ListView listViewRoute;
-    TextView tv_station, tv_cost, tv_time;
+    TextView tv_station, tv_cost, tv_time, tv_titleBar;
     Spinner spinner;
     MyAdapter adapter;
 
@@ -46,7 +51,11 @@ public class RouteActivity extends AppCompatActivity {
         tv_cost = findViewById(R.id.cost);
         tv_time = findViewById(R.id.time);
         spinner = findViewById(R.id.spinner);
+        tv_titleBar = findViewById(R.id.titleBar);
 
+        String currTime = getTime();
+//        tv_titleBar.setText(currTime);
+        Log.d("okok", "Current time: " + currTime);
 
         int numArrayList;
         final ArrayList <ArrayList <Integer> > allRouteArrayList;
@@ -73,11 +82,10 @@ public class RouteActivity extends AppCompatActivity {
         String[] routes3only;
         if(numArrayList > 3){
             routes3only = new String[3];
-            Log.d("okok", numArrayList + "");
 
-            for(int i = 3; i < numArrayList; i++) {
-                Log.d("okok", "77");
+            for(int i = 0; i < 3; i++) {
                 routes3only[i] = routes[i] + "";
+                Log.d("okok", "here");
             }
 
             // set numArrayList = 3
@@ -88,15 +96,15 @@ public class RouteActivity extends AppCompatActivity {
             routes3only = new String[numArrayList];
             for(int i = 0; i < numArrayList; i++)
                 routes3only[i] = routes[i] + "";
-            Log.d("okok", "88");
         }
-        Log.d("okok", "90");
 
         int timeEfficient = getTimeEfficientRouteIndex(allRouteArrayList, numArrayList);
         int crowdEfficient = getCrowdEfficientRouteIndex(allRouteArrayList, numArrayList);
 
         routes3only[timeEfficient] += " (Time Efficient)";
         routes3only[crowdEfficient] += " (Crowd Efficient)";
+        Log.d("okok", "Time Eff: " + timeEfficient);
+        Log.d("okok", "Crowd Eff: " + crowdEfficient);
 
 
         //setting the spinner
@@ -290,5 +298,15 @@ public class RouteActivity extends AppCompatActivity {
 		return minInd;
 	}
 
+
+	public String getTime(){
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("HH:mm:ss");
+        date.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
+        String localTime = date.format(currentLocalTime);
+
+        return localTime;
+    }
 
 }

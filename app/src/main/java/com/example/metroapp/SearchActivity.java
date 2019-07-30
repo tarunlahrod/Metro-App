@@ -381,10 +381,6 @@ public class SearchActivity extends AppCompatActivity {
         src = search(source);
         dest = search(destination);
 
-        Log.d("route", "src: " + src);
-        Log.d("route", "dest: " + dest);
-
-
         // use something like: metroMap.get(position).getStationGraphNode;
     	metroMap.printAllPaths(src, dest);
     	ArrayList <ArrayList <Integer> > allRouteArrayList = new ArrayList <ArrayList<Integer>>();
