@@ -33,6 +33,7 @@ public class SearchActivity extends AppCompatActivity {
 
     ArrayList<Station> stationArrayList = new ArrayList<>(5);
     ArrayAdapter<String> adapterString;
+    MyAdapter customAdapter;
     ArrayAdapter<Station> adapterStation;
     Station[] stationArray = new Station[5];
 
@@ -56,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
 
     String[] stationNameList = new String[]{"Netaji Subhash Place", "Shalimar Bagh", "Azadpur", "Model Town", "G.T.B. Nagar", "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines", "Kashmere Gate", "Tis Hazari", "Pulbangash", "Pratap Nagar", "Shastri Nagar", "Inderlok", "Kanhaiya Nagar", "Keshav Puram", "Chandni Chowk", "Chawri Bazar", "New Delhi", "Rajiv Chowk", "RK Ashram Marg", "Jhandewalan", "Karol Bagh", "Rajendra Place", "Patel Nagar", "Shadipur", "Kirti Nagar", "Satguru Ram Singh Marg", "Ashok Park Main", "Moti Nagar", "Ramesh Nagar", "Rajouri Garden", "ESI - Basaidarapur", "Punjabi Bagh (W)", "Shakurpur"};
     int[] stationNodeList = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
-    int[] stationColorCode = new int[]{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+    int[] stationColorCode = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
     boolean sourceEntered = false;
 //    int[] stationColorCodes = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
 
@@ -160,6 +161,11 @@ public class SearchActivity extends AppCompatActivity {
         // populating the list view of all the stations
 
         populateListView();
+
+        // populating the list view of all the stations (with logo) (does not work, has bugs)
+//        populateListViewWithLogo();
+
+
         //Suggestions for user in listview based on the letter they typed to enter station for source
         et_from.addTextChangedListener(new TextWatcher(){
             @Override
@@ -227,11 +233,9 @@ public class SearchActivity extends AppCompatActivity {
                 if(!sourceEntered){
                     et_from.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = true;
-                    Log.d("route", "from: " + et_from.getText().toString());
                 } else {
                     et_to.setText(stationArrayList.get(position).getStationName());
                     sourceEntered = false;
-                    Log.d("route", "to: " + et_to);
                 }
             }
         });
@@ -253,9 +257,7 @@ public class SearchActivity extends AppCompatActivity {
                     et_to.requestFocus();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-
-                    showPath(from, to);
+                   showPath(from, to);
                 }
             }
         });
@@ -281,6 +283,48 @@ public class SearchActivity extends AppCompatActivity {
         adapterString = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stationNameList);
         listView.setAdapter(adapterString);
     }
+
+    public void populateListViewWithLogo(){
+
+        // adding colored logos
+        for(int i=0; i<stationColorCode.length; i++){
+            stationColorCode[i] = colorCodeToImageResource(stationColorCode[i]);
+        }
+
+        customAdapter = new MyAdapter(getApplicationContext(), stationNameList, stationNodeList, stationColorCode);
+        listView.setAdapter(customAdapter);
+    }
+
+
+    public int colorCodeToImageResource(int colorCode){
+        int red = R.drawable.delhi_metro_logo1;
+        int blue = R.drawable.delhi_metro_logo2;
+        int green = R.drawable.delhi_metro_logo3;
+        int yellow = R.drawable.delhi_metro_logo4;
+        int pink = R.drawable.delhi_metro_logo5;
+        int purple = R.drawable.delhi_metro_logo6;
+        int magenta = R.drawable.delhi_metro_logo7;
+        int violet = R.drawable.delhi_metro_logo8;
+        int orange = R.drawable.delhi_metro_logo9;
+        int black = R.drawable.delhi_metro;
+
+        int logoColor;
+
+        switch(colorCode){
+            case 1: logoColor = red; break;
+            case 2: logoColor = blue; break;
+            case 3: logoColor = green; break;
+            case 4: logoColor = yellow; break;
+            case 5: logoColor = pink; break;
+            case 6: logoColor = purple; break;
+            case 7: logoColor = magenta; break;
+            case 8: logoColor = violet; break;
+            case 9: logoColor = orange; break;
+            default: logoColor = black;
+        }
+        return logoColor;
+    }
+
 
     public void addEdgesToMetroMap(){
 
@@ -436,16 +480,13 @@ public class SearchActivity extends AppCompatActivity {
         src = search(source);
         dest = search(destination);
 
-        Log.d("route", "src: " + src);
-        Log.d("route", "dest: " + dest);
-
-
         // use something like: metroMap.get(position).getStationGraphNode;
     	metroMap.printAllPaths(src, dest);
     	ArrayList <ArrayList <Integer> > allRouteArrayList = new ArrayList <ArrayList<Integer>>();
 
     	allRouteArrayList = metroMap.getAllPaths();
 
+    	Log.d("okok", "All paths:" + allRouteArrayList);
         // passing arrayList to intent
         Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
 
@@ -458,25 +499,6 @@ public class SearchActivity extends AppCompatActivity {
         }
         Log.d("route", "starting intent");
         startActivity(intent);
-//
-//    	// say, selecting the first path only
-//    	ArrayList<Integer> routeArrayList = new ArrayList<>();
-//    	routeArrayList = allRouteArrayList.get(0);
-//
-//    	int routeLength = routeArrayList.size();
-//
-//    	// a string array of stations in route
-//    	routeNameArray = new  String[routeLength];
-//    	routeNodeArray = new int[routeLength];
-//
-//    	routeNameArray = nodeToStation(routeArrayList, routeLength);
-//    	routeNodeArray = nodeArrayListToNodeArray(routeArrayList, routeLength);
-//
-//    	for(int i =0; i<routeLength; i++) {
-//            Log.d("route", "The route is  route: " + routeNameArray[i]);
-//        }
-
-
     }
 
     public int search(String s){
@@ -506,8 +528,6 @@ public class SearchActivity extends AppCompatActivity {
 
     public
 
-    // creating a custom array adapter class
-
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String stationName[];
@@ -515,7 +535,7 @@ public class SearchActivity extends AppCompatActivity {
         int lineColor[];
 
         MyAdapter (Context c, String name[], int node[], int img[]) {
-            super(c, R.layout.station_row, R.id.tv_stationName, name);
+            super(c, R.layout.station_row_final, R.id.tv_stationName, name);
             this.context = c;
             this.lineColor = img;
             this.stationName = name;
@@ -526,7 +546,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.station_row, parent, false);
+            View row = layoutInflater.inflate(R.layout.station_row_final, parent, false);
             TextView sName = row.findViewById(R.id.tv_stationName);
             TextView sNode = row.findViewById(R.id.tv_stationNode);
             ImageView sColor = row.findViewById(R.id.imageView);
