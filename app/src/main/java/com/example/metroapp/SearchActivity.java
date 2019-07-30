@@ -70,6 +70,7 @@ public class SearchActivity extends AppCompatActivity {
         et_to = findViewById(R.id.et_to);
         btn_route = findViewById(R.id.btn_route);
         listView = findViewById(R.id.listView);
+
 //        class myAdapter extends ArrayAdapter<String>{
 //            Context context;
 //            String stations[];
@@ -158,6 +159,7 @@ public class SearchActivity extends AppCompatActivity {
         fillStationArrayList(stationArray);
 
         // populating the list view of all the stations
+
         populateListView();
 
         // populating the list view of all the stations (with logo) (does not work, has bugs)
@@ -183,6 +185,8 @@ public class SearchActivity extends AppCompatActivity {
                         String elemt=adapterString.getItem(position);
                         et_from.setText(elemt);
                         et_to.requestFocus();
+                        populateListView();
+
                     }
                 });
 
@@ -193,11 +197,12 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+
         //Suggestions for user in listview based on the letter they typed to enter station for destination
         et_to.addTextChangedListener(new TextWatcher(){
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                populateListView();
+                Log.d("Listview","Is this triggered");
             }
 
             @Override
@@ -212,6 +217,7 @@ public class SearchActivity extends AppCompatActivity {
                         Log.d("SearchActivity","Item clicked at location"+position);
                         String elemt=adapterString.getItem(position);
                         et_to.setText(elemt);
+
                     }
                 });
             }
