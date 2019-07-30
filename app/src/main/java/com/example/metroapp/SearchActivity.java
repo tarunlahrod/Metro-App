@@ -30,7 +30,6 @@ public class SearchActivity extends AppCompatActivity {
     EditText et_from, et_to;
     Button btn_route;
     ListView listView;
-    TextView textbox1;
 
     ArrayList<Station> stationArrayList = new ArrayList<>(5);
     ArrayAdapter<String> adapterString;
