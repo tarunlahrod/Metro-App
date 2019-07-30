@@ -212,7 +212,7 @@ public class SearchActivity extends AppCompatActivity {
                         Log.d("SearchActivity","Item clicked at location"+position);
                         String elemt=adapterString.getItem(position);
                         et_to.setText(elemt);
-                        listView.setVisibility(View.INVISIBLE);
+
                     }
                 });
             }
