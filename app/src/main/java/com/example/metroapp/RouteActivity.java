@@ -20,13 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class RouteActivity extends AppCompatActivity {
 
     ListView listViewRoute;
-    TextView tv_station, tv_cost, tv_time;
+    TextView tv_station, tv_cost, tv_time, tv_titleBar;
     Spinner spinner;
     MyAdapter adapter;
 
@@ -35,7 +40,8 @@ public class RouteActivity extends AppCompatActivity {
     int[] stationNodeList = new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34};
     int[] stationColorCode = new int[]{ 1, 5, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 3, 1, 1, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 5, 5, 5};
     int[] stationInterchange = new int[]{ 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0};
-    
+    float[] crowdWeight = new float[]{0.75f, 0.62f, 0.7f, 0.66f, 0.72f, 0.78f, 0.62f, 0.6f, 0.85f, 0.63f, 0.62f, 0.64f, 0.7f, 0.78f, 0.7f, 0.65f, 0.79f, 0.78f, 0.8f, 0.95f, 0.7f, 0.75f, 0.8f, 0.75f, 0.69f, 0.7f, 0.85f, 0.63f, 0.71f, 0.68f, 0.66f, 0.78f, 0.75f, 0.75f, 0.75f};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +51,11 @@ public class RouteActivity extends AppCompatActivity {
         tv_cost = findViewById(R.id.cost);
         tv_time = findViewById(R.id.time);
         spinner = findViewById(R.id.spinner);
+        tv_titleBar = findViewById(R.id.titleBar);
 
+        String currTime = getTime();
+//        tv_titleBar.setText(currTime);
+        Log.d("okok", "Current time: " + currTime);
 
         int numArrayList;
         final ArrayList <ArrayList <Integer> > allRouteArrayList;
@@ -58,18 +68,47 @@ public class RouteActivity extends AppCompatActivity {
         //getting data from intent
         numArrayList  = getIntent().getIntExtra("noOfArrayLists", 3);
         allRouteArrayList = new ArrayList<>(numArrayList);
-
         String[] routes = new String[numArrayList];
 
         for(int i = 0; i < numArrayList; i++){
             routes[i] = "Route " + (i+1);
             ArrayList<Integer> arrayList = getIntent().getIntegerArrayListExtra("pathArrayList"+i);
             allRouteArrayList.add(arrayList);
-            sortBubble(allRouteArrayList);
+        }
+        sortBubble(allRouteArrayList);
+
+
+        // storing only 3 routes at maximum
+        String[] routes3only;
+        if(numArrayList > 3){
+            routes3only = new String[3];
+
+            for(int i = 0; i < 3; i++) {
+                routes3only[i] = routes[i] + "";
+                Log.d("okok", "here");
+            }
+
+            // set numArrayList = 3
+            numArrayList = 3;
+        }
+        else {
+
+            routes3only = new String[numArrayList];
+            for(int i = 0; i < numArrayList; i++)
+                routes3only[i] = routes[i] + "";
         }
 
+        int timeEfficient = getTimeEfficientRouteIndex(allRouteArrayList, numArrayList);
+        int crowdEfficient = getCrowdEfficientRouteIndex(allRouteArrayList, numArrayList);
+
+        routes3only[timeEfficient] += " (Time Efficient)";
+        routes3only[crowdEfficient] += " (Crowd Efficient)";
+        Log.d("okok", "Time Eff: " + timeEfficient);
+        Log.d("okok", "Crowd Eff: " + crowdEfficient);
+
+
         //setting the spinner
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, routes3only);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
 
@@ -112,7 +151,7 @@ public class RouteActivity extends AppCompatActivity {
         int lineColor[];
 
         MyAdapter (Context c, String name[], int node[], int img[]) {
-            super(c, R.layout.station_row, R.id.tv_stationName, name);
+            super(c, R.layout.station_row_final, R.id.tv_stationName, name);
             this.context = c;
             this.lineColor = img;
             this.stationName = name;
@@ -123,7 +162,7 @@ public class RouteActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.station_row, parent, false);
+            View row = layoutInflater.inflate(R.layout.station_row_final, parent, false);
             TextView sName = row.findViewById(R.id.tv_stationName);
             TextView sNode = row.findViewById(R.id.tv_stationNode);
             ImageView sColor = row.findViewById(R.id.imageView);
@@ -132,8 +171,6 @@ public class RouteActivity extends AppCompatActivity {
             sName.setText(stationName[position]);
             sNode.setText("Node number " + stationNode[position]);
             sColor.setImageResource(lineColor[position]);
-
-
 
             return row;
         }
@@ -212,11 +249,11 @@ public class RouteActivity extends AppCompatActivity {
 
     	for(int i=0; i<length; i++){
 
-    		// check if current station is an interchangable station
-    		// if interchangable stations at first and last, do not consider them as interchange
-    		if((stationInterchange[route.get(i)] == 1) && (i != 1) && (i != length-1)){
+    		// check if current station is an interchangeable station
+    		// if interchangeable stations at first and last, do not consider them as interchange
+    		if((stationInterchange[route.get(i)] == 1) && (i != 0) && (i != length-1)){
 
-    			// if interchangable station, then check if the path has an interchange
+    			// if interchangeable station, then check if the path has an interchange
     			// for this, check if the lineColor of previous and next station is same or not. If not, it is an interchange
     			if(stationColorCode[route.get(i-1)] != stationColorCode[route.get(i+1)]){
 
@@ -231,5 +268,45 @@ public class RouteActivity extends AppCompatActivity {
     	return time;
 	}
 
+	public int getTimeEfficientRouteIndex(ArrayList <ArrayList <Integer> > allroutes, int n) {
+		
+		int[] time = new int[n];
+		for(int i = 0; i < n; i++){
+			time[i] = calculateTime(allroutes.get(i), allroutes.get(i).size());
+		}
+		int minInd = 0;
+		for(int i = 1; i < n; i++)
+			if(time[i] < time[minInd])
+				minInd = i;
+
+		return minInd;
+	}
+
+	public int getCrowdEfficientRouteIndex(ArrayList <ArrayList <Integer> > allroutes, int n) {
+		
+		float[] crowd = new float[n];
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < allroutes.get(i).size(); j++){
+				crowd[i] += crowdWeight[allroutes.get(i).get(j)];
+			}
+		}
+		int minInd = 0;
+		for(int i = 1; i < n; i++)
+			if(crowd[i] < crowd[minInd])
+				minInd = i;
+
+		return minInd;
+	}
+
+
+	public String getTime(){
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("HH:mm:ss");
+        date.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
+        String localTime = date.format(currentLocalTime);
+
+        return localTime;
+    }
 
 }
