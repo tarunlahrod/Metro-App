@@ -13,20 +13,25 @@ Application project for internship at Delhi Metro Rail Corporation (DMRC).
 
 ### Opening Screen
 
-![Opening screen](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Opening_Activity.png)
-
+<img src="https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Opening_Activity.png" width="250">
 <br><br>
 
 ### Search Activity
 
-![Search activity](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity.png)
+<img src="https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity.png" width="250">
 
-![Search Activity stations selected](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity_StationEntered.png)
+
+
+<img src="https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity_StationEntered.png" width="250">
+
 
 <br><br>
 
 ### Route Activity
-![Route activity](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity.png)
+<img src="https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity.png" width="250">
 
-![Route activity multiple routes](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity_multiple_routes.png)
+
+
+<img src="https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity_multiple_routes.png" width="250">
+
 Stay tuned. :smiley:
