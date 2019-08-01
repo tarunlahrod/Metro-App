@@ -14,17 +14,19 @@ Application project for internship at Delhi Metro Rail Corporation (DMRC).
 ### Opening Screen
 
 ![Opening screen](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Opening_Activity.png)
+
 <br><br>
+
 ### Search Activity
 
 ![Search activity](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity.png)
-<br><br>
-### Search Activity (stations selected)
+
 ![Search Activity stations selected](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Search_Activity_StationEntered.png)
+
 <br><br>
+
 ### Route Activity
 ![Route activity](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity.png)
-<br><br>
-### Route Activity (multiple routes)
+
 ![Route activity multiple routes](https://github.com/tarunlahrod/Metro-App/blob/master/Screenshots/Route_Activity_multiple_routes.png)
 Stay tuned. :smiley:
