@@ -286,6 +286,7 @@ public class RouteActivity extends AppCompatActivity {
 		int[] time = new int[n];
 		for(int i = 0; i < n; i++){
 			time[i] = calculateTime(allroutes.get(i), allroutes.get(i).size());
+			Log.d("Time","Vlaue of time is "+ time);
 		}
 		int minInd = 0;
 		for(int i = 1; i < n; i++)
